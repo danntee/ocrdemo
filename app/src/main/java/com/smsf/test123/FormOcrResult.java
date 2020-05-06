@@ -34,9 +34,9 @@ public class FormOcrResult {
         String url = "https://aip.baidubce.com/rest/2.0/solution/v1/form_ocr/get_request_result";
         try {
 
-            String resid = id;
 
-            String param = "request_id=" +"19571077_1723166&result_type=json";
+
+            String param = "request_id=" +id+"&result_type=json";
 
             // 注意这里仅为了简化编码每一次请求都去获取access_token，线上环境access_token有过期时间， 客户端可自行缓存，过期后重新获取。
             String accessToken = token;

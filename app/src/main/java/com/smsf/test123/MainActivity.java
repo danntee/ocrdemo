@@ -3,6 +3,7 @@ package com.smsf.test123;//package com.smsf.test123;/*
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,7 +27,9 @@ import com.baidu.ocr.ui.camera.CameraActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.smsf.test123.Services.AuthService;
+import com.smsf.test123.Utils.Exceldata;
 import com.smsf.test123.Utils.FileUtil;
+import com.smsf.test123.Utils.Result_data;
 import com.smsf.test123.Utils.TestExecleBean;
 import com.smsf.test123.Utils.jsonFormOcrRequest;
 import com.smsf.test123.Utils.jsonFormOcrResult;
@@ -96,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean hasGotToken = false;
     static String request_id=null;
     private AlertDialog.Builder alertDialog;
-
+    private ProgressDialog pd1 = null;
+    String tabletoken=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -269,6 +273,12 @@ public class MainActivity extends AppCompatActivity {
 //                            }
 //                        });
             new Thread(networkTask_request).start();
+            pd1 = new ProgressDialog(MainActivity.this);
+            pd1.show();
+
+
+
+
         }
         // 识别成功回调，通用文字识别
         if (requestCode == REQUEST_CODE_GENERAL_BASIC && resultCode == Activity.RESULT_OK) {
@@ -331,9 +341,9 @@ public class MainActivity extends AppCompatActivity {
 
                 s = FormOcrRequest.formOcrRequest(AuthService.getAuth(), FileUtil.getSaveFile(getApplicationContext()).getAbsolutePath());
                 jsonFormOcrRequest j =  gson.fromJson(s,jsonFormOcrRequest.class);
-
+                tabletoken=AuthService.getAuth();
                 data.putString("value",j.getResult().get(0).getRequest_id());
-                data.putString("TOKEN",AuthService.getAuth());
+                data.putString("TOKEN",tabletoken);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -352,11 +362,15 @@ public class MainActivity extends AppCompatActivity {
             Message msg = new Message();
             Bundle data=new Bundle();
             String s= null;
-
-            s=FormOcrResult.formOcrResult(AuthService.getAuth(),request_id);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            s=FormOcrResult.formOcrResult(tabletoken,request_id);
 //                s = FormOcrRequest.formOcrRequest(AuthService.getAuth(), FileUtil.getSaveFile(getApplicationContext()).getAbsolutePath());
             data.putString("Resvalue", s);
-            data.putString("TOKEN",AuthService.getAuth());
+            data.putString("TOKEN",tabletoken);
             msg.setData(data);
             handler_result.sendMessage(msg);
 
@@ -380,13 +394,55 @@ public class MainActivity extends AppCompatActivity {
     Handler handler_result = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            Gson gson=new Gson();
 
             super.handleMessage(msg);
             Bundle data = msg.getData();
             String val = data.getString("Resvalue");
-            TestExecleBean bean = JSON.parseObject(val,TestExecleBean.class);
-//            Log.d("ss",bean.getLog_id());
+            Result_data bean = JSON.parseObject(val, Result_data.class);
+            Log.d("stat",String.valueOf(bean.getRecstat()));
+            if (bean.getRecstat() == 3) {
+
+                Exceldata edata = JSON.parseObject(bean.getData(), Exceldata.class);
+                Log.d("ssi", String.valueOf(edata.getForm_num()));
+                String res="";
+                for (Exceldata.FormsBean b : edata.getForms()) {
+                    for(int i=0;i<b.getBody().size();i++) {
+                        Log.d("resu", b.getBody().get(i).getWord());
+                        res += b.getBody().get(i).getWord();
+                        res+=" ";
+                    }
+
+                }
+                pd1.hide();
+                Intent intent=new Intent(MainActivity.this,FresultActivity.class);
+                intent.putExtra("ocrResult",res);
+                try {
+                    intent.putExtra("ocrPic",
+                            FileUtil.getSaveFile(getApplication()).getAbsolutePath());
+                    File file= new File(FileUtil.getSaveFile(getApplication()).getAbsolutePath());
+                    Calendar now = new GregorianCalendar();
+                    SimpleDateFormat simpleDate = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
+                    String fileName = simpleDate.format(now.getTime());
+                    Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    File filec = new File(file.getAbsolutePath() + fileName + ".jpg");
+                    FileOutputStream out = new FileOutputStream(filec);
+                    try {
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        out.flush();
+                        out.close();
+                    }
+                    catch (NullPointerException e)
+                    {
+                        ;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                startActivity(intent);
+            }
+            else {
+                new Thread(networkTask_get_result).start();
+            }
         }
     };
 
