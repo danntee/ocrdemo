@@ -1,23 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.smsf.test123">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.smsf.allroundscan">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon_laun"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/icon_laun"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:requestLegacyExternalStorage="true">
-        <activity android:name=".history.historyActivity"></activity>
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <activity android:name=".history.historyActivity"/>
         <activity android:name=".ocrActivites.IDCardActivity" />
         <activity android:name=".ocrActivites.FresultActivity" />
+        <!--友盟统计SDK配置-->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5eb23367570df33d5900013b" />
+        <!--设置动态渠道变量-->
+        <meta-data
+            android:name="UMENT_CHANNEL"
+            android:value="$ {UMENG_CHANNEL_VALUE}" />
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.smsf.allroundscan.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/fileprovider" />
+        </provider>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

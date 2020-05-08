@@ -26,32 +26,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="46dp"
-                android:layout_height="46dp"
-                android:layout_marginStart="5dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/imageButton"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/menu" />
-
-            <ImageView
-                android:id="@+id/imageButton"
-                android:layout_width="46dp"
-                android:layout_height="46dp"
-                android:layout_marginEnd="5dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.93"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/huangguanguanjundiyihuiyuan" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_weight="1"/>
     </androidx.appcompat.widget.Toolbar>
 
 
@@ -60,7 +35,7 @@
         android:layout_width="327dp"
         android:layout_height="36dp"
         android:layout_weight="1"
-        android:text="OCR扫描"
+        android:text="全能扫描识别王"
         android:textColor="@color/colorWhite"
         android:textSize="30dp"
         app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
