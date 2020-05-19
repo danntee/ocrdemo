@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">全能扫描识别王</string>
+    <string name="common_privacy_title">温馨提示</string>
+    <string name="common_privacy_ok">同意并继续</string>
+    <string name="common_privacy_cancle">不同意</string>
+    <string name="skip">跳过</string>
 </resources>

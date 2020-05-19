@@ -10,7 +10,7 @@
     <color name="text_gray4">#6D7A80 </color>
     <color name="text_hint_gray">#CDCDCD</color>
     <color name="black">#404040</color>
-
+    <color name="common_color_privacy">#FF1C58</color>
     <color name="gray">#8c8c8c</color>
     <color name="shallow_gray">#e0e0e0</color>
     <color name="shallow_white">#F1F1F1</color>
@@ -18,6 +18,7 @@
     <color name="shallow_white4">#F9F9F9</color>
     <color name="text_bule">#48aeef</color>
     <color name="text_orange">#C9A05B</color>
+    <color name="titleColor">#000000</color>
     <color name="text_black">#000000</color>
     <color name="edit_bg_gray">#F1F1F1</color>
     <color name="button_gray">#C9C9C9</color>
@@ -31,7 +32,8 @@
     <color name="gray_line">#DDDDDD</color>
     <color name="white_no">#FFFFFFFF</color>
     <color name="white_in">#00FFFFFF</color>
-
+    <color name="titleColorSelected">#F54D33</color>
+    <color name="transparent">#00000000</color>
     <color name="bg_orange">#FFC25E </color>
     <color name="dotted_line_gray">#CECECE</color>
     <color name="black3">#000000</color>
